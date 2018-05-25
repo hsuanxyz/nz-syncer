@@ -1,0 +1,23 @@
+{
+  "name": "nz-styles-syncer",
+  "version": "0.0.1",
+  "description": "antd styles syncer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HsuanXyz/nz-styles-syncer.git"
+  },
+  "author": "Hsuan Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HsuanXyz/nz-styles-syncer/issues"
+  },
+  "homepage": "https://github.com/HsuanXyz/nz-styles-syncer#readme",
+  "dependencies": {
+    "@octokit/rest": "^15.7.0",
+    "fs-extra": "^6.0.1"
+  }
+}
