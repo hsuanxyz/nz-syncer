@@ -10,7 +10,7 @@ class Bot {
     this.token = token;
     this.github = new Github({
       token,
-      owner: 'NG-ZORRO',
+      owner: 'ng-zorro-bot',
       repo : 'ng-zorro-antd'
     });
     this.zorroPath = path.resolve(__dirname, '../tmp/ng-zorro-antd');
@@ -30,6 +30,7 @@ class Bot {
     await git(this.zorroPath).add(diff.files.map(file => file.file));
     await git(this.zorroPath).commit(`chore: update styles`, { '--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>' });
     await git(this.zorroPath).push('origin', branchName, { '-f': null });
+    await this.github.createPullRequests(branchName, `(TEST)chore: update styles`, diffTable);
   }
 
   /**

@@ -27,6 +27,18 @@ class Github {
   async getUser() {
     return this._github.users.get();
   }
+
+  async createPullRequests(branch, title, body) {
+    return this._github.pullRequests.create({
+      title,
+      body,
+      owner: 'NG-ZORRO',
+      repo: this._repo,
+      head: `${this._owner}:${branch}`,
+      base: 'master',
+      maintainer_can_modify: true
+    })
+  }
 }
 
 module.exports = Github;
