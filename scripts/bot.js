@@ -22,6 +22,25 @@ class Bot {
     const latestTagName = await this.getRepos();
     const branchName = await this.createBranch(latestTagName);
     await this.updateStyles();
+    const diff = await git(this.zorroPath).diffSummary();
+    if (diff.files.length === 0) {
+      return Promise.resolve(0)
+    }
+    const diffTable = this.generationDiffTable(diff);
+
+  }
+
+  /**
+   *
+   * @param diff {DiffResult}
+   * @return {string}
+   */
+  generationDiffTable(diff) {
+    let diffTable = "| file | changes | insertions(+) deletions(-) | \n | --- | --- | --- | \n";
+    diff.files.forEach(item => {
+      diffTable += `| ${item.file} | ${item.changes} | ${new Array(item.insertions).fill('+').join('')}${new Array(item.deletions).fill('-').join('')} | \n`
+    });
+    return diffTable;
   }
 
   /**
