@@ -23,6 +23,10 @@ class Github {
   async getLatestRelease({owner, repo} = {owner: this._owner, repo: this._repo}) {
     return this._github.repos.getLatestRelease({owner, repo})
   }
+
+  async getUser() {
+    return this._github.users.get();
+  }
 }
 
 module.exports = Github;

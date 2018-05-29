@@ -27,11 +27,12 @@ class Bot {
       return Promise.resolve(0)
     }
     const diffTable = this.generationDiffTable(diff);
-
+    await git(this.zorroPath).add(diff.files.map(file => file.file));
+    await git(this.zorroPath).commit(`chore: update styles`, { '--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>' });
+    await git(this.zorroPath).push('origin', branchName, { '-f': null });
   }
 
   /**
-   *
    * @param diff {DiffResult}
    * @return {string}
    */
@@ -159,3 +160,4 @@ class Bot {
   }
 
 }
+
