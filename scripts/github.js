@@ -2,7 +2,7 @@ const octokit = require('@octokit/rest');
 
 class Github {
 
-  constructor({owner, repo}) {
+  constructor({owner, repo, token}) {
     this._owner = owner;
     this._repo = repo;
     this._github = octokit({
@@ -16,7 +16,7 @@ class Github {
     });
     this._github.authenticate({
       type: 'oauth',
-      token: process.env.GITHUB_TOKEN || 'invalid token'
+      token: token || 'invalid token'
     });
   }
 
