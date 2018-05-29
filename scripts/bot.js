@@ -17,6 +17,13 @@ class Bot {
     this.antDesignPath = path.resolve(__dirname, '../tmp/ant-design');
   }
 
+
+  async syncStyle() {
+    const latestTagName = await this.getRepos();
+    const branchName = await this.createBranch(latestTagName);
+    await this.updateStyles();
+  }
+
   /**
    * 更新样式文件
    * @return {Promise<void>}
@@ -44,7 +51,6 @@ class Bot {
         styles.push(`@import "./${item}/style/index.less";`);
       }
     });
-
     fs.copySync(path.join(this.antDesignPath, `components/style`), path.join(this.zorroPath, `components/style`), {overwrite: true});
 
     fs.outputFile(path.join(this.zorroPath, `components/components.less`), styles.join('\n') + '\n');
@@ -52,8 +58,8 @@ class Bot {
   }
 
   /**
-   * 更新库
-   * @return {Promise<void>}
+   * 获取库
+   * @return {Promise<string>}
    */
   async getRepos() {
     const tmp = path.resolve(__dirname, '../tmp');
@@ -61,7 +67,30 @@ class Bot {
     const latestTagName = await this.findLatestAntDesignRelease();
     await this.cloneZorro();
     await this.asyncUpstream();
-    return Promise.resolve();
+    return Promise.resolve(latestTagName);
+  }
+
+  /**
+   * 创建分支
+   * @param name
+   * @return {Promise<string>}
+   */
+  async createBranch(name) {
+    // TODO 检查线上分支是否重复
+    console.log('TASK: Create branch');
+    const branchName = `sync-style/${name}`;
+    await git(this.zorroPath).checkout('master');
+    try {
+      await git(this.zorroPath).branch(['-d', branchName]);
+      await git(this.zorroPath).checkoutLocalBranch(branchName);
+      console.log('TASK(success): Create branch');
+      return Promise.resolve(branchName);
+    } catch (e) {
+      console.warn(e);
+      await git(this.zorroPath).checkoutLocalBranch(branchName);
+      console.log('TASK(success): Create branch');
+      return Promise.resolve(branchName);
+    }
   }
 
   /**
@@ -111,4 +140,3 @@ class Bot {
   }
 
 }
-
