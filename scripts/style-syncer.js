@@ -41,6 +41,8 @@ class StyleSyncer {
       return Promise.resolve(0)
     }
     const diffTable = this.generationDiffTable(diff);
+    await git(this.zorroPath).addConfig('user.name', 'ng-zorro-bot');
+    await git(this.zorroPath).addConfig('user.email', 'ng-zorro-bot@users.noreply.github.com');
     await git(this.zorroPath).add(diff.files.map(file => file.file));
     await git(this.zorroPath).commit(`chore: update styles`, {'--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>'});
     await git(this.zorroPath).push('origin', branchName, {'-f': null});
