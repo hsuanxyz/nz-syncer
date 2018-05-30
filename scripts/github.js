@@ -28,6 +28,30 @@ class Github {
     return this._github.users.get();
   }
 
+  async getHEADCommit() {
+    return this._github.repos.getCommit({
+      owner: 'NG-ZORRO',
+      repo: this._repo,
+      sha: 'HEAD'
+    })
+  }
+
+  async getPullRequestsByHead(head) {
+    return this._github.pullRequests.getAll({
+      owner:  this._owner,
+      repo: this._repo,
+      head: `${this._owner}:${head}`
+    })
+  }
+
+  async getBranch(branch) {
+    return this._github.repos.getBranch({
+      branch,
+      owner: this._owner,
+      repo: this._repo,
+    })
+  }
+
   async createPullRequests(branch, title, body) {
     return this._github.pullRequests.create({
       title,
