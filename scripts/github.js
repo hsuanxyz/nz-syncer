@@ -8,14 +8,14 @@ class Github {
     this._github = octokit({
       timeout: 0,
       headers: {
-        accept: 'application/vnd.github.v3+json',
+        accept      : 'application/vnd.github.v3+json',
         'user-agent': 'NG-ZORRO GitHub Bot v0.0.1'
       },
       baseUrl: 'https://api.github.com',
-      agent: undefined
+      agent  : undefined
     });
     this._github.authenticate({
-      type: 'oauth',
+      type : 'oauth',
       token: token || 'invalid token'
     });
   }
@@ -31,16 +31,16 @@ class Github {
   async getHEADCommit() {
     return this._github.repos.getCommit({
       owner: 'NG-ZORRO',
-      repo: this._repo,
-      sha: 'HEAD'
+      repo : this._repo,
+      sha  : 'HEAD'
     })
   }
 
   async getPullRequestsByHead(head) {
     return this._github.pullRequests.getAll({
-      owner:  this._owner,
-      repo: this._repo,
-      head: `${this._owner}:${head}`
+      owner: 'NG-ZORRO',
+      repo : this._repo,
+      head : `${this._owner}:${head}`
     })
   }
 
@@ -48,7 +48,7 @@ class Github {
     return this._github.repos.getBranch({
       branch,
       owner: this._owner,
-      repo: this._repo,
+      repo : this._repo,
     })
   }
 
@@ -56,10 +56,10 @@ class Github {
     return this._github.pullRequests.create({
       title,
       body,
-      owner: this._owner,
-      repo: this._repo,
-      head: `${this._owner}:${branch}`,
-      base: 'master',
+      owner                : 'NG-ZORRO',
+      repo                 : this._repo,
+      head                 : `${this._owner}:${branch}`,
+      base                 : 'master',
       maintainer_can_modify: true
     })
   }

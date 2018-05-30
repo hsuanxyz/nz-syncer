@@ -2,7 +2,7 @@ const winston = require('winston');
 const path = require('path');
 
 const logger = winston.createLogger({
-  format: winston.format.combine(
+  format    : winston.format.combine(
     winston.format.timestamp(),
     winston.format.simple(),
     winston.format.align(),
@@ -17,7 +17,7 @@ const logger = winston.createLogger({
         winston.format.printf(info => `${info.level}:${info.message}`),
       )
     }),
-    new winston.transports.File({ filename: path.resolve(__dirname, '../bot.log')})
+    new winston.transports.File({filename: path.resolve(__dirname, '../bot.log')})
   ]
 });
 
