@@ -32,7 +32,7 @@ class Github {
     return this._github.pullRequests.create({
       title,
       body,
-      owner: 'NG-ZORRO',
+      owner: this._owner,
       repo: this._repo,
       head: `${this._owner}:${branch}`,
       base: 'master',
