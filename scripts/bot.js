@@ -13,16 +13,16 @@ class Bot {
     });
     this.zorroPath = path.resolve(__dirname, '../tmp/ng-zorro-antd');
     this.antDesignPath = path.resolve(__dirname, '../tmp/ant-design');
-    logger.info(`========================= NG-ZORRO GitHub Bot =========================`);
+    logger.info(`========================= NG-ZORRO GitHub Bot(styles-syncer) ==========================`);
   }
 
   run() {
     this.checkUpdate()
       .then(branchName => branchName !== '' ? this.syncStyle({branchName}) : Promise.resolve())
-      .then(() => setTimeout(() => this.run(), 1000 * 60 * 10))
+      .then(() => setTimeout(() => this.run(), 1000 * 60 * 15))
       .catch((e) => {
-        console.log(e);
-        return setTimeout(() => this.run(), 1000 * 60 * 10)
+        logger.error(`run error \n${e}`);
+        return setTimeout(() => this.run(), 1000 * 60 * 15)
       });
   }
 
@@ -55,3 +55,4 @@ class Bot {
 
 }
 
+module.exports = Bot;

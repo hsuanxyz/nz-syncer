@@ -1,7 +1,6 @@
 const {download, unzip} = require("./utils");
 const fs = require('fs-extra');
 const path = require('path');
-const Github = require('./github');
 const git = require('simple-git/promise');
 const glob = require('glob').sync;
 const logger = require('./logger');
