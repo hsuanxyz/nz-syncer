@@ -26,5 +26,9 @@
     "simple-git": "^1.95.0",
     "unzip": "^0.1.11",
     "winston": "^3.0.0-rc5"
+  },
+  "now": {
+    "name": "nz-styles-syncer",
+    "alias": "nz-styles-syncer"
   }
 }

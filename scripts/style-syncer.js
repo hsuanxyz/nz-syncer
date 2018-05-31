@@ -40,15 +40,18 @@ class StyleSyncer {
       logger.info(`No changes, the task stop`);
       return Promise.resolve(0)
     }
+    const head = branchName.split('/')[1].split('-')[0];
+    const tag = branchName.split('/')[1].split('-')[1];
+    const title = `chore: update styles(${tag} => ${head})`;
     const diffTable = this.generationDiffTable(diff);
     await git(this.zorroPath).addConfig('user.name', 'ng-zorro-bot');
     await git(this.zorroPath).addConfig('user.email', 'ng-zorro-bot@users.noreply.github.com');
-    await git(this.zorroPath).add(diff.files.map(file => file.file));
-    await git(this.zorroPath).commit(`chore: update styles`, {'--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>'});
+    await git(this.zorroPath).add('.');
+    await git(this.zorroPath).commit(title, {'--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>'});
     await git(this.zorroPath).push('origin', branchName, {'-f': null});
     logger.info(`Create PullRequests`);
     try {
-      await this.github.createPullRequests(branchName, `chore: update styles ${branchName}`, diffTable);
+      await this.github.createPullRequests(branchName, title, diffTable);
       logger.info(`Create PR success`);
     } catch (e) {
       logger.error(`Create PR error \n${e}`);
@@ -121,7 +124,6 @@ class StyleSyncer {
 
   /**
    * 创建分支
-   * @param name
    * @return {Promise<string>}
    */
   async createBranch() {
