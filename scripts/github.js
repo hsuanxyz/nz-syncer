@@ -44,6 +44,24 @@ class Github {
     })
   }
 
+  async getOutPullRequests() {
+    return this._github.pullRequests.getAll({
+      owner: 'NG-ZORRO',
+      repo : this._repo,
+      head : `${this._owner}`,
+      state: 'open'
+    })
+  }
+
+  async closePullRequest(number) {
+    return this._github.pullRequests.update({
+      owner: 'NG-ZORRO',
+      repo : this._repo,
+      number : number,
+      state: 'closed'
+    })
+  }
+
   async getBranch(branch) {
     return this._github.repos.getBranch({
       branch,

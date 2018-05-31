@@ -19,10 +19,10 @@ class Bot {
   run() {
     this.checkUpdate()
       .then(branchName => branchName !== '' ? this.syncStyle({branchName}) : Promise.resolve())
-      .then(() => setTimeout(() => this.run(), 1000 * 60 * 15))
+      .then(() => setTimeout(() => this.run(), 1000 * 60))
       .catch((e) => {
         logger.error(`run error \n${e}`);
-        return setTimeout(() => this.run(), 1000 * 60 * 15)
+        return setTimeout(() => this.run(), 1000 * 60 * 2)
       });
   }
 
@@ -39,7 +39,16 @@ class Bot {
     const latestTag = release.data.tag_name;
     const branchName = `sync-style/${latestHEAD.slice(0, 7)}-${latestTag}`;
     const prs = await this.github.getPullRequestsByHead(branchName);
-    return Promise.resolve((prs.data && prs.data.length === 0) ? branchName : '');
+    const isUpdate = prs.data && prs.data.length === 0;
+    if (isUpdate) {
+      const outPrs = await this.github.getOutPullRequests();
+      if (outPrs && outPrs.data.length) {
+        const _outPrs = outPrs.data.filter(e => e.title.indexOf('chore: update styles') !== -1);
+        await Promise.all(_outPrs.map(async e => await this.github.closePullRequest(e.number)))
+      }
+    }
+    logger.info(`Check update ${latestHEAD}...${latestTag}`);
+    return Promise.resolve(isUpdate ? branchName : '');
   }
 
   syncStyle(options) {
