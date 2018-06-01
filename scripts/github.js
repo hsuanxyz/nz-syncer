@@ -48,7 +48,6 @@ class Github {
     return this._github.pullRequests.getAll({
       owner: 'NG-ZORRO',
       repo : this._repo,
-      head : `${this._owner}`,
       state: 'open'
     })
   }
@@ -78,6 +77,18 @@ class Github {
       repo                 : this._repo,
       head                 : `${this._owner}:${branch}`,
       base                 : 'master',
+      maintainer_can_modify: true
+    })
+  }
+
+  async updatePullRequest(number, title, body) {
+    return this._github.pullRequests.update({
+      title,
+      body,
+      number,
+      owner: 'NG-ZORRO',
+      repo : this._repo,
+      state: 'open',
       maintainer_can_modify: true
     })
   }

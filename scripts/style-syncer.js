@@ -10,9 +10,9 @@ class StyleSyncer {
   constructor({
                 token,
                 github,
-                skipComponents,
+                latestTag,
                 skipIndex,
-                skipComponent,
+                latestHEAD,
                 zorroPath,
                 antDesignPath,
                 number,
@@ -20,13 +20,12 @@ class StyleSyncer {
               }) {
     this.token = token;
     this.github = github;
-    this.skipComponents = skipComponents || [];
-    this.skipIndex = !!skipIndex;
-    this.skipComponent = !!skipComponent;
+    this.latestTag = latestTag;
     this.zorroPath = zorroPath;
     this.antDesignPath = antDesignPath;
-    this.number = number;
+    this.latestHEAD = latestHEAD;
     this.branchName = branchName;
+    this.number = number;
   }
 
   async run() {
@@ -40,19 +39,30 @@ class StyleSyncer {
       logger.info(`No changes, the task stop`);
       return Promise.resolve(0)
     }
-    const head = branchName.split('/')[1].split('-')[0];
-    const tag = branchName.split('/')[1].split('-')[1];
-    const title = `chore: update styles(${tag} => ${head})`;
     const diffTable = this.generationDiffTable(diff);
+    const title = `chore: update styles(ant-design ${this.latestTag})`;
+    const body = `
+NG-ZORRO latest commit: ${this.latestHEAD}
+AntDesign latest release: [\`${this.latestTag}\`](https://github.com/ant-design/ant-design/releases/tag/${this.latestTag})
+
+${diffTable}
+`;
+    console.log(title);
     await git(this.zorroPath).addConfig('user.name', 'ng-zorro-bot');
     await git(this.zorroPath).addConfig('user.email', 'ng-zorro-bot@users.noreply.github.com');
     await git(this.zorroPath).add('.');
     await git(this.zorroPath).commit(title, {'--author': 'ng-zorro-bot \<ng-zorro-bot@users.noreply.github.com\>'});
     await git(this.zorroPath).push('origin', branchName, {'-f': null});
-    logger.info(`Create PullRequests`);
     try {
-      await this.github.createPullRequests(branchName, title, diffTable);
-      logger.info(`Create PR success`);
+      if (this.number) {
+        logger.info(`Update PullRequests`);
+        await this.github.updatePullRequest(this.number, title, body);
+        logger.info(`Update PR success`);
+      } else {
+        logger.info(`Create PullRequests`);
+        await this.github.createPullRequests(branchName, title, body);
+        logger.info(`Create PR success`);
+      }
     } catch (e) {
       logger.error(`Create PR error \n${e}`);
     }
@@ -104,8 +114,8 @@ class StyleSyncer {
 
     fs.copySync(path.join(this.antDesignPath, `components/style`), path.join(this.zorroPath, `components/style`), {overwrite: true});
 
-    // 重新生成 components.less
-    fs.outputFile(path.join(this.zorroPath, `components/components.less`), styles.join('\n') + '\n');
+    // // 重新生成 components.less
+    // fs.outputFile(path.join(this.zorroPath, `components/components.less`), styles.join('\n') + '\n');
     return Promise.resolve();
   }
 
