@@ -47,7 +47,6 @@ AntDesign latest release: [\`${this.latestTag}\`](https://github.com/ant-design/
 
 ${diffTable}
 `;
-    console.log(title);
     await git(this.zorroPath).addConfig('user.name', 'ng-zorro-bot');
     await git(this.zorroPath).addConfig('user.email', 'ng-zorro-bot@users.noreply.github.com');
     await git(this.zorroPath).add('.');
@@ -77,7 +76,7 @@ ${diffTable}
   generationDiffTable(diff) {
     let diffTable = "| file | changes | insertions(+) deletions(-) | \n | --- | --- | --- | \n";
     diff.files.forEach(item => {
-      diffTable += `| ${item.file} | ${item.changes} | ${new Array(item.insertions).fill('+').join('')}${new Array(item.deletions).fill('-').join('')} | \n`
+      diffTable += `| \`${item.file}\` | ${item.changes} | ${new Array(item.insertions).fill('+').join('')}${new Array(item.deletions).fill('-').join('')} | \n`
     });
     return diffTable;
   }
