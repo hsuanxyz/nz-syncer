@@ -1,6 +1,9 @@
-# nz-styles-syncer(WIP)
+# nz-styles-syncer
 
-- 订阅 react 合并事件
-- 判断 diff 是否包含 styles
-- clone git 全量覆盖
-- 提交 commit
+## .env
+
+```text
+GITHUB_TOKEN=token
+GITHUB_ORIGIN_OWNER=ng-zorro-bot
+GITHUB_UPSTREAM_OWNER=NG-ZORRO
+```
