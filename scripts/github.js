@@ -2,8 +2,9 @@ const octokit = require('@octokit/rest');
 
 class Github {
 
-  constructor({owner, repo, token}) {
-    this._owner = owner;
+  constructor({originOwner, upstreamOwner, repo, token}) {
+    this._owner = originOwner;
+    this._upstreamOwner = upstreamOwner;
     this._repo = repo;
     this._github = octokit({
       timeout: 0,
@@ -30,7 +31,7 @@ class Github {
 
   async getHEADCommit() {
     return this._github.repos.getCommit({
-      owner: 'NG-ZORRO',
+      owner: this._upstreamOwner,
       repo : this._repo,
       sha  : 'HEAD'
     })
@@ -38,7 +39,7 @@ class Github {
 
   async getPullRequestsByHead(head) {
     return this._github.pullRequests.getAll({
-      owner: 'NG-ZORRO',
+      owner: this._upstreamOwner,
       repo : this._repo,
       head : `${this._owner}:${head}`
     })
@@ -46,7 +47,7 @@ class Github {
 
   async getOutPullRequests() {
     return this._github.pullRequests.getAll({
-      owner: 'NG-ZORRO',
+      owner: this._upstreamOwner,
       repo : this._repo,
       state: 'open'
     })
@@ -54,7 +55,7 @@ class Github {
 
   async closePullRequest(number) {
     return this._github.pullRequests.update({
-      owner: 'NG-ZORRO',
+      owner: this._upstreamOwner,
       repo : this._repo,
       number : number,
       state: 'closed'
@@ -73,7 +74,7 @@ class Github {
     return this._github.pullRequests.create({
       title,
       body,
-      owner                : 'NG-ZORRO',
+      owner                : this._upstreamOwner,
       repo                 : this._repo,
       head                 : `${this._owner}:${branch}`,
       base                 : 'master',
@@ -86,7 +87,7 @@ class Github {
       title,
       body,
       number,
-      owner: 'NG-ZORRO',
+      owner: this._upstreamOwner,
       repo : this._repo,
       state: 'open',
       maintainer_can_modify: true

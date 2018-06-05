@@ -4,11 +4,12 @@ const logger = require('./logger');
 const StyleSyncer = require('./style-syncer');
 
 class Bot {
-  constructor({token}) {
+  constructor({token, upstreamOwner, originOwner}) {
     this.token = token;
     this.github = new Github({
       token,
-      owner: 'ng-zorro-bot',
+      originOwner,
+      upstreamOwner,
       repo : 'ng-zorro-antd'
     });
     this.zorroPath = path.resolve(__dirname, '../tmp/ng-zorro-antd');
