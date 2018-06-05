@@ -16,7 +16,7 @@ class Bot {
     logger.info(`========================= NG-ZORRO GitHub Bot(styles-syncer) ==========================`);
   }
 
-  run() {
+  run(interval) {
     this.checkUpdate()
       .then(data => {
         if (data === null) {
@@ -25,10 +25,10 @@ class Bot {
           return this.syncStyle(data)
         }
       })
-      .then(() => setTimeout(() => this.run(), 1000 * 60))
+      .then(() => setTimeout(() => this.run(interval), interval))
       .catch((e) => {
         logger.error(`run error \n${e}`);
-        return setTimeout(() => this.run(), 1000 * 60 * 2)
+        return setTimeout(() => this.run(interval), interval)
       });
   }
 

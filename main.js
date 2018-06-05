@@ -3,10 +3,11 @@ const fs = require('fs-extra');
 const Bot = require('./scripts/bot');
 
 const token = process.env.GITHUB_TOKEN || 'Invalid token';
-console.log(token);
+const interval = process.env.INTERVAL;
+
 const bot = new Bot({token});
 
-bot.run();
+bot.run(interval);
 
 module.exports = async () => {
   const log = await fs.readFile('./bot.log', 'utf8');
