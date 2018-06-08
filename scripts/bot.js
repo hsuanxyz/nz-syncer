@@ -57,10 +57,11 @@ class Bot {
     await Promise.all(_outPrs.map(async e => await this.github.closePullRequest(e.number)));
     if (prs.data && prs.data.length === 0) {
       logger.info(`Not found PR, so create`);
-    } else if (prs.data[0].base.sha !== latestHEAD) {
+    } else if (prs.data[0].base.sha !== latestHEAD && prs.data[0].merged_at === null) {
       logger.info(`Found PR, but not the latest, so update this PR`);
     } else {
       logger.info(`No update, done!`);
+      return Promise.resolve(null);
     }
     return Promise.resolve(isUpdate ? { branchName, latestHEAD, latestTag, number } : null);
   }

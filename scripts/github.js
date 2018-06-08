@@ -41,7 +41,8 @@ class Github {
     return this._github.pullRequests.getAll({
       owner: this._upstreamOwner,
       repo : this._repo,
-      head : `${this._owner}:${head}`
+      head : `${this._owner}:${head}`,
+      state: 'all'
     })
   }
 
