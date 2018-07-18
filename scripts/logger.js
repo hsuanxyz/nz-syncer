@@ -8,7 +8,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     winston.format.simple(),
     winston.format.align(),
-    winston.format.printf(info => `${info.timestamp} ${info.level}:${info.message}`)
+    winston.format.json()
   ),
   transports: [
     new winston.transports.Console({
