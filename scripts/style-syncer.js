@@ -16,7 +16,9 @@ class StyleSyncer {
                 zorroPath,
                 antDesignPath,
                 number,
-                branchName
+                branchName,
+                username,
+                userEmail
               }) {
     this.token = token;
     this.github = github;
@@ -26,6 +28,8 @@ class StyleSyncer {
     this.latestHEAD = latestHEAD;
     this.branchName = branchName;
     this.number = number;
+    this.username = username;
+    this.userEmail = userEmail;
   }
 
   async run() {
@@ -225,11 +229,25 @@ ${diffTable}
     logger.info(`Clone ng-zorro-antd from https://github.com/ng-zorro-bot/ng-zorro-antd.git`);
 
     try {
-      await  git().silent(false).clone(`https://ng-zorro-bot:${this.token}@github.com/ng-zorro-bot/ng-zorro-antd.git`, this.zorroPath, {'--depth': 1});
+      await git().silent(false).clone(`https://ng-zorro-bot:${this.token}@github.com/ng-zorro-bot/ng-zorro-antd.git`, this.zorroPath, {'--depth': 1});
       logger.info(`Clone success ${this.zorroPath}`);
-      return Promise.resolve();
+      return this.initGitAccount()
     } catch (e) {
       logger.error(`Clone error \n${e}`);
+      return Promise.reject(e);
+    }
+  }
+
+  async initGitAccount() {
+    logger.info(`Init account ${this.username} [${this.userEmail}]`);
+
+    try {
+      const _git = git(this.zorroPath);
+      await _git.addConfig('user.name', this.username);
+      await _git.addConfig('user.email', this.userEmail);
+      return Promise.resolve();
+    } catch (e) {
+      logger.error(`Init account error \n${e}`);
       return Promise.reject(e);
     }
   }

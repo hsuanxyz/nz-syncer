@@ -5,10 +5,13 @@ const Bot = require('./scripts/bot');
 const token = process.env.GITHUB_TOKEN || 'Invalid token';
 const originOwner = process.env.GITHUB_ORIGIN_OWNER || 'ng-zorro-bot';
 const upstreamOwner = process.env.GITHUB_UPSTREAM_OWNER || 'ng-zorro-bot';
+const username = process.env.GITHUB_ORIGIN_USERNAME || 'ng-zorro-bot';
+const userEmail = process.env.GITHUB_ORIGIN_USER_EMAIL || 'ng-zorro@users.noreply.github.com';
+
 
 const interval = process.env.INTERVAL || 1000 * 60;
 
-const bot = new Bot({token, originOwner, upstreamOwner});
+const bot = new Bot({token, originOwner, upstreamOwner, username, userEmail});
 
 bot.run(interval);
 
