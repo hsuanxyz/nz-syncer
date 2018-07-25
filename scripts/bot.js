@@ -4,13 +4,15 @@ const logger = require('./logger');
 const StyleSyncer = require('./style-syncer');
 
 class Bot {
-  constructor({token, upstreamOwner, originOwner}) {
+  constructor({token, upstreamOwner, originOwner, username, userEmail}) {
     this.token = token;
+    this.username = username;
+    this.userEmail = userEmail;
     this.github = new Github({
       token,
       originOwner,
       upstreamOwner,
-      repo : 'ng-zorro-antd'
+      repo: 'ng-zorro-antd'
     });
     this.zorroPath = path.resolve(__dirname, '../tmp/ng-zorro-antd');
     this.antDesignPath = path.resolve(__dirname, '../tmp/ant-design');
@@ -63,7 +65,7 @@ class Bot {
       logger.info(`No update, done!`);
       return Promise.resolve(null);
     }
-    return Promise.resolve(isUpdate ? { branchName, latestHEAD, latestTag, number } : null);
+    return Promise.resolve(isUpdate ? {branchName, latestHEAD, latestTag, number} : null);
   }
 
   syncStyle(options) {
@@ -72,6 +74,8 @@ class Bot {
       github       : this.github,
       zorroPath    : this.zorroPath,
       antDesignPath: this.antDesignPath,
+      username     : this.username,
+      userEmail    : this.userEmail,
       ...options
     });
     return styleSyncer.run()
