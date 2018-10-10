@@ -16,7 +16,7 @@ class Bot {
     });
     this.zorroPath = path.resolve(__dirname, '../tmp/ng-zorro-antd');
     this.antDesignPath = path.resolve(__dirname, '../tmp/ant-design');
-    logger.info(`========================= NG-ZORRO GitHub Bot(styles-syncer) ==========================`);
+    logger.info(`========================= NG-ZORRO Syncer ==========================`);
   }
 
   run(interval) {

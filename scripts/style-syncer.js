@@ -44,7 +44,7 @@ class StyleSyncer {
       return Promise.resolve(0)
     }
     const diffTable = this.generationDiffTable(diff);
-    const title = `chore: update styles(ant-design ${this.latestTag})`;
+    const title = `chore: sync ant-design v${this.latestTag}`;
     const body = `
 NG-ZORRO latest commit: ${this.latestHEAD}
 AntDesign latest release: [\`${this.latestTag}\`](https://github.com/ant-design/ant-design/releases/tag/${this.latestTag})

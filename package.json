@@ -1,7 +1,7 @@
 {
-  "name": "nz-styles-syncer",
+  "name": "nz-syncer",
   "version": "0.0.1",
-  "description": "antd styles syncer",
+  "description": "ng-zorro-antd syncer",
   "main": "main.js",
   "scripts": {
     "start": "micro",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HsuanXyz/nz-styles-syncer.git"
+    "url": "git+https://github.com/HsuanXyz/nz-syncer.git"
   },
   "author": "Hsuan Lee",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/HsuanXyz/nz-styles-syncer/issues"
+    "url": "https://github.com/HsuanXyz/nz-syncer/issues"
   },
-  "homepage": "https://github.com/HsuanXyz/nz-styles-syncer#readme",
+  "homepage": "https://github.com/HsuanXyz/nz-syncer#readme",
   "dependencies": {
     "@octokit/rest": "^15.7.0",
     "dotenv": "^5.0.1",
