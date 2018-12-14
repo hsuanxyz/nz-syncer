@@ -164,8 +164,10 @@ ${diffTable}
       const _git = git(this.zorroPath);
       await _git.addRemote('upstream', 'https://github.com/NG-ZORRO/ng-zorro-antd.git');
       await _git.fetch('upstream', 'master');
-      await _git.merge({'upstream/master': null});
-      await _git.push('origin', 'master');
+      await _git.reset(['--hard', 'upstream/master']);
+      await _git.clean('f');
+      // await _git.merge({'upstream/master': null});
+      // await _git.push('origin', 'master', {'force': null});
       logger.info(`Sync success`);
       return Promise.resolve();
     } catch (e) {
