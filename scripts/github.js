@@ -38,7 +38,7 @@ class Github {
   }
 
   async getPullRequestsByHead(head) {
-    return this._github.pullRequests.getAll({
+    return this._github.pullRequests.list({
       owner: this._upstreamOwner,
       repo : this._repo,
       head : `${this._owner}:${head}`,
@@ -47,7 +47,7 @@ class Github {
   }
 
   async getOutPullRequests() {
-    return this._github.pullRequests.getAll({
+    return this._github.pullRequests.list({
       owner: this._upstreamOwner,
       repo : this._repo,
       state: 'open'
