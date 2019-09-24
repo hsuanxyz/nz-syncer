@@ -2,6 +2,8 @@ const path = require('path');
 const Github = require('./github');
 const logger = require('./logger');
 const StyleSyncer = require('./style-syncer');
+const semver = require('semver');
+
 
 class Bot {
   constructor({token, upstreamOwner, originOwner, username, userEmail}) {
@@ -49,6 +51,9 @@ class Bot {
     logger.info(`NG-ZORRO latest sha: ${latestHEAD}`);
     const latestTag = release.data.tag_name;
     logger.info(`ant-design tag: ${latestTag}`);
+    if (semver.prerelease(latestTag) !== null) {
+      return Promise.resolve(null);
+    }
     const branchName = `sync-style/${latestTag}`;
     logger.info(`Checking PR`);
     const prs = await this.github.getPullRequestsByHead(branchName);

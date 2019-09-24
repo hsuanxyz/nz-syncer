@@ -1,5 +1,5 @@
 const request = require('request');
-const unzip = require('unzip');
+const unzip = require('unzipper');
 const fs = require('fs-extra');
 
 const utils = {
