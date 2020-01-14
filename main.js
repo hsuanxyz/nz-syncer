@@ -1,19 +1,22 @@
 require('dotenv').config();
 const fs = require('fs-extra');
 const Bot = require('./scripts/bot');
+const argv = require('yargs').argv;
 
 const token = process.env.GITHUB_TOKEN || 'Invalid token';
 const originOwner = process.env.GITHUB_ORIGIN_OWNER || 'ng-zorro-bot';
 const upstreamOwner = process.env.GITHUB_UPSTREAM_OWNER || 'ng-zorro-bot';
 const username = process.env.GITHUB_ORIGIN_USERNAME || 'ng-zorro-bot';
 const userEmail = process.env.GITHUB_ORIGIN_USER_EMAIL || 'ng-zorro@users.noreply.github.com';
-
-
 const interval = process.env.INTERVAL || 1000 * 60;
 
 const bot = new Bot({token, originOwner, upstreamOwner, username, userEmail});
 
-bot.run(interval);
+if (argv.tag) {
+  bot.checkOnceWithVersion(argv.tag)
+} else {
+  bot.run(interval);
+}
 
 module.exports = async () => {
   const log = await fs.readFile('./bot.log', 'utf8');
@@ -38,15 +41,15 @@ module.exports = async () => {
     height: 100%;
     position: relative;
   }
-  
+
   .line {
     color: #eee;
   }
-  
+
   .index, .date {
     color: #999;
   }
-  
+
   .info .level {
     color: aquamarine;
   }
@@ -54,7 +57,7 @@ module.exports = async () => {
   .error .level {
     color: brown;
   }
-  
+
   .error .message {
     color: coral;
   }

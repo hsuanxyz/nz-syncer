@@ -184,11 +184,7 @@ ${diffTable}
   async findLatestAntDesignRelease() {
     logger.info('Getting latest AntDesign version');
     const tmp = path.resolve(__dirname, '../tmp');
-    const result = await this.github.getLatestRelease({
-      owner: 'ant-design',
-      repo : 'ant-design'
-    });
-    const tagName = result.data.tag_name;
+    const tagName = this.latestTag;
     logger.info(`Latest version ${tagName}`);
     const latestUrl = `https://github.com/ant-design/ant-design/archive/${tagName}.zip`;
     const latestPath = `${tmp}/ant-design-latest.zip`;

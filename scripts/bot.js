@@ -21,40 +21,49 @@ class Bot {
     logger.info(`========================= NG-ZORRO Syncer ==========================`);
   }
 
+  checkOnceWithVersion(version) {
+    this.checkUpdate(version)
+      .then(data => {
+        if (data !== null) {
+          return this.syncStyle(data);
+        }
+      })
+  }
+
   run(interval) {
     this.checkUpdate()
       .then(data => {
         if (data === null) {
-          return Promise.resolve()
+          return Promise.resolve();
         } else {
-          return this.syncStyle(data)
+          return this.syncStyle(data);
         }
       })
       .then(() => setTimeout(() => this.run(interval), interval))
       .catch((e) => {
         logger.error(`run error \n${e}`);
-        return setTimeout(() => this.run(interval), interval)
+        return setTimeout(() => this.run(interval), interval);
       });
   }
 
   /**
    * @return {Promise<any>}
    */
-  async checkUpdate() {
+  async checkUpdate(version) {
     logger.info(`Checking update`);
     const commit = await this.github.getHEADCommit();
     const release = await this.github.getLatestRelease({
       owner: 'ant-design',
-      repo : 'ant-design'
+      repo: 'ant-design'
     });
-    const latestHEAD = commit.data.sha;
+    const latestHEAD = version || commit.data.sha;
     logger.info(`NG-ZORRO latest sha: ${latestHEAD}`);
     const latestTag = release.data.tag_name;
     logger.info(`ant-design tag: ${latestTag}`);
     if (semver.prerelease(latestTag) !== null) {
       return Promise.resolve(null);
     }
-    const branchName = `sync-style/${latestTag}`;
+    const branchName = `${version ? 'force' : 'sync-style'}/${latestTag}`;
     logger.info(`Checking PR`);
     const prs = await this.github.getPullRequestsByHead(branchName);
     const isUpdate = (prs.data && prs.data.length === 0) || prs.data[0].base.sha !== latestHEAD;
@@ -75,12 +84,12 @@ class Bot {
 
   syncStyle(options) {
     const styleSyncer = new StyleSyncer({
-      token        : this.token,
-      github       : this.github,
-      zorroPath    : this.zorroPath,
+      token: this.token,
+      github: this.github,
+      zorroPath: this.zorroPath,
       antDesignPath: this.antDesignPath,
-      username     : this.username,
-      userEmail    : this.userEmail,
+      username: this.username,
+      userEmail: this.userEmail,
       ...options
     });
     return styleSyncer.run()
