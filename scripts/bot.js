@@ -60,7 +60,7 @@ class Bot {
     logger.info(`NG-ZORRO latest sha: ${latestHEAD}`);
     const latestTag = release.data.tag_name;
     logger.info(`ant-design tag: ${latestTag}`);
-    if (semver.prerelease(latestTag) !== null) {
+    if (!version && semver.prerelease(latestTag) !== null) {
       return Promise.resolve(null);
     }
     const branchName = `${version ? 'force' : 'sync-style'}/${latestTag}`;
