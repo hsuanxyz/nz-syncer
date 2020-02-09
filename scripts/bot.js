@@ -56,9 +56,9 @@ class Bot {
       owner: 'ant-design',
       repo: 'ant-design'
     });
-    const latestHEAD = version || commit.data.sha;
+    const latestHEAD = commit.data.sha;
     logger.info(`NG-ZORRO latest sha: ${latestHEAD}`);
-    const latestTag = release.data.tag_name;
+    const latestTag = version || release.data.tag_name;
     logger.info(`ant-design tag: ${latestTag}`);
     if (!version && semver.prerelease(latestTag) !== null) {
       return Promise.resolve(null);
