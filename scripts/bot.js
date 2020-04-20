@@ -69,8 +69,17 @@ class Bot {
     const isUpdate = (prs.data && prs.data.length === 0) || prs.data[0].base.sha !== latestHEAD;
     const number = prs.data[0] && prs.data[0].number;
     const outPrs = await this.github.getOutPullRequests();
-    const _outPrs = outPrs.data.filter(e => e.head.ref.indexOf('sync-style') !== -1 && e.head.ref !== branchName);
-    await Promise.all(_outPrs.map(async e => await this.github.closePullRequest(e.number)));
+    const _outPrs = outPrs.data.filter(e => e.head.ref.indexOf('sync-style') !== -1 &&
+      e.user &&
+      e.user.login === this.username &&
+      e.head.ref !== branchName);
+    await Promise.all(_outPrs.map(async e => {
+      const v = e.head.ref.split('sync-style/')[1];
+      if (semver.lt(v, latestTag)) {
+       return this.github.closePullRequest(e.number)
+      }
+      return Promise.resolve();
+    }));
     if (prs.data && prs.data.length === 0) {
       logger.info(`Not found PR, so create`);
     } else if (prs.data[0].base.sha !== latestHEAD && prs.data[0].merged_at === null) {
