@@ -25,7 +25,7 @@
     "micro": "^9.3.2",
     "request": "^2.87.0",
     "semver": "^6.3.0",
-    "simple-git": "^1.95.0",
+    "simple-git": "^3.3.0",
     "unzip": "^0.1.11",
     "unzipper": "^0.10.5",
     "winston": "^3.0.0-rc5",
